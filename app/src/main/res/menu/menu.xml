@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/file"
+        android:title="Wellcome">
+        <menu>
+            <item
+                android:id="@+id/mnuNew"
+                android:icon="@drawable/pro"
+                android:title="character" />
+            <item
+                android:id="@+id/mnuOpen"
+                android:icon="@drawable/logo"
+                android:title="Disney" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/mnuAbout"
+        android:icon="@drawable/ic"
+        app:showAsAction="ifRoom|withText"
+        android:title="Contact" />
+    <item
+        android:id="@+id/mnuHelp"
+        android:title="Help" />
+</menu>

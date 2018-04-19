@@ -1,10 +1,22 @@
 package codingwithmitch.com.recyclerview;
 
+import android.content.res.Configuration;
+import android.support.annotation.Nullable;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -13,8 +25,26 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     //vars
+    private  String [] mDrawerTitle = {"History", "Video", "Movie", "Game", "television", "Activities", "Product", "App", "About" , };
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private ListView mListView;
+
+
     private ArrayList<String> mNames = new ArrayList<>();
     private ArrayList<String> mImageUrls = new ArrayList<>();
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        actionBarDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        actionBarDrawerToggle.syncState();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,38 +53,63 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: started.");
 
         initImageBitmaps();
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+//        actionBarDrawerToggle = new ActionBarDrawerToggle(MainActivity.this,
+//                mDrawerLayout,
+//                R.string.open_drawer,
+//                R.string.close_drawer);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(MainActivity.this,mDrawerLayout,R.string.open_drawer,R.string.close_drawer);
+        mDrawerLayout.addDrawerListener(actionBarDrawerToggle);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mListView = findViewById(R.id.drawer);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>( this,
+                android.R.layout.simple_list_item_1,mDrawerTitle );
+        mListView.setAdapter(adapter);
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String itemValue = (String) mListView.getItemAtPosition(position);
+
+                mDrawerLayout.closeDrawers();
+                Toast.makeText(getApplicationContext(),
+                        "Go" + " to " + itemValue + " !!!!!", Toast.LENGTH_SHORT)
+                        .show();
+            }
+        });
     }
 
     private void initImageBitmaps(){
         Log.d(TAG, "initImageBitmaps: preparing bitmaps.");
 
-        mImageUrls.add("https://amp.thisisinsider.com/images/57bf2e72b6fa0217008b4611-750-563.jpg");
-        mNames.add("Captain America");
+        mImageUrls.add("https://lumiere-a.akamaihd.net/v1/images/character_disneyprincess_ariel_262253c9.jpeg?region=0,0,300,300");
+        mNames.add("Ariel");
 
-        mImageUrls.add("https://geekandsundry.com/wp-content/uploads/2016/08/ironman-cover.jpg");
-        mNames.add("Iron Man");
+        mImageUrls.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGN_n3heEZap8PTbtgaJCCwjGgs7joBspR1P36Xd9cBifHMJR5");
+        mNames.add("belle");
 
-        mImageUrls.add("https://i.ytimg.com/vi/7p7rocHEecE/maxresdefault.jpg");
-        mNames.add("Thor");
+        mImageUrls.add("https://lumiere-a.akamaihd.net/v1/images/character_disneyprincess_cidnerella_fbe77f43.jpeg?region=0,0,300,300");
+        mNames.add("cinderella");
 
-        mImageUrls.add("https://vignette.wikia.nocookie.net/hulk/images/2/22/Avengers_hulk.jpg/revision/latest?cb=20151118045112");
-        mNames.add("Hulk");
+        mImageUrls.add("https://yt3.ggpht.com/a-/AJLlDp1FgsWeHw5PEs-NLIx7mTq5QMD35qP9qy5JAg=s900-mo-c-c0xffffffff-rj-k-no");
+        mNames.add("snow white");
 
-        mImageUrls.add("https://www.gamestop.com/gs/images/content-pdp/gameinformer/spidermannewscreen1-610.jpg");
-        mNames.add("Spiderman");
+        mImageUrls.add("http://images6.fanpop.com/image/photos/39000000/Aladdin-Princess-Jasmine-disney-princess-39040302-300-300.jpg");
+        mNames.add("jasmine");
 
+        mImageUrls.add("https://lumiere-a.akamaihd.net/v1/images/au_character_disneyprincess_rapunzel_nr_02_ae6bbb67.jpeg?region=0,0,300,300");
+        mNames.add("rapunzel");
 
-        mImageUrls.add("http://img.actucine.com/wp-content/uploads/2015/05/Black-Panther.jpg");
-        mNames.add("Black Panther");
+        mImageUrls.add("https://vignette.wikia.nocookie.net/disney/images/b/b0/DP-Tiana.jpg/revision/latest?cb=20140515133539");
+        mNames.add("tiana");
 
-        mImageUrls.add("http://www.slashfilm.com/wp/wp-content/images/guardians2-babygroot-dancing-hottoys-frontpage-700x327.jpg");
-        mNames.add("Baby Groot");
+        mImageUrls.add("https://lumiere-a.akamaihd.net/v1/images/character_disneyprincess_mulan_693b57cb.jpeg?region=0,0,300,300");
+        mNames.add("mulan");
 
-        mImageUrls.add("https://revengeofthefans.com/wp-content/uploads/2018/04/Thanos-Infinity-Stones-Movie-Future.jpg");
-        mNames.add("Thanos");
-
-        mImageUrls.add("https://news.marvel.com/wp-content/uploads/2018/03/AIW_master-960x540.jpg");
-        mNames.add("Avengers: Infinity War");
+        mImageUrls.add("https://vignette.wikia.nocookie.net/winx/images/a/a9/Icon_Merida.jpg/revision/latest?cb=20150909130627");
+        mNames.add("merida");
 
         initRecyclerView();
     }
@@ -66,26 +121,33 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            // Handle item selection
+            switch (item.getItemId()) {
+                case R.id.mnuNew:
+                    Toast.makeText(this, "New!", Toast.LENGTH_SHORT).show();
+                    return true;
+                case R.id.mnuHelp:
+                    Toast.makeText(this, "Help!", Toast.LENGTH_SHORT).show();
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
+        }
+        else {
+            return true;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
